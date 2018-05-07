@@ -59,6 +59,19 @@ sequelize.sync()
         
         inquirer.prompt(questions).then(answers => {
             console.log(answers);
+            var yourProduct = productArr.find(element => element.product_name === answers.productName);
+            console.log('yourproduct:', yourProduct);
+
+            if (yourProduct.stock_quantity >= answers.orderQuantity) {
+                console.log('ordering', answers.orderQuantity, 'of',  yourProduct.product_name);
+                console.log('new inventory of', yourProduct.product_name, 'is', yourProduct.stock_quantity - answers.orderQuantity);
+                
+                
+            } else {
+                console.log('insufficient stock');
+                
+            }
+            
             
         
         });
