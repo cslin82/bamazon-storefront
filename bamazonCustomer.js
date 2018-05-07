@@ -8,6 +8,8 @@ const sequelize = new Sequelize('bamazon', SQLUSER, SQLPASS, {
     dialect: 'mysql'
 });
 
+const inquirer = require('inquirer');
+
 const Product = sequelize.define('product', {
     // item_id (unique id for each product)
     item_id: Sequelize.INTEGER,
@@ -28,23 +30,52 @@ const Product = sequelize.define('product', {
 
 
 sequelize.sync()
-    .then(() => Product.create({
-        item_id: 12,
-        product_name: 'apples',
-        department_name: 'produce',
-        price: 3,
-        stock_quantity: 100
-    }))
-    .then(thisthing => {
-        console.log(thisthing.toJSON());
-    });
+    .then(() => Product.findAll({
+        // attributes: ["product_name"],
+        raw: true
+    })) // end .then for SELECT * FROM... query
+    .then(productArr => {
+        console.log(productArr);
+        var productList = productArr.map(x => x.product_name);
+
+        const questions = [
+            /* Pass your questions in here */
+            {
+                type: 'list',
+                name: 'productName',
+                message: "What product do you want?",
+                paginated: true,
+                choices: productList
+        
+            },
+            {
+                type: 'input',
+                name: 'orderQuantity',
+                message: "How many do you want?"
+            }
+        ];
+        
+        
+        
+        inquirer.prompt(questions).then(answers => {
+            console.log(answers);
+            
+        
+        });
+        
+
+
+
+    }); // end .then 2
 
 
 
 
 // Running this application will first display all of the items available for sale. Include the ids, names, and prices of products for sale.
 
-
+// Model.({
+//     attributes: ['foo', 'bar']
+//   });
 
 
 // The app should then prompt users with two messages.
