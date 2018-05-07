@@ -1,0 +1,11 @@
+﻿item_id,product_name,department_name,price,stock_quantity
+1,product 1,dept A,58.1,50
+2,product 2,dept B,1.5,500
+3,product 3,dept C,2.5,12
+4,product 4,dept A,6.8,18
+5,product 5,dept B,4.8,64
+6,product 6,dept C,94.4,85
+7,product 7,dept A,12,4
+8,product 8,dept B,64.8,87
+9,product 9,dept C,46.8,78
+10,product 10,dept A,78.1,61
