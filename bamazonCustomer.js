@@ -22,11 +22,14 @@ const Product = sequelize.define('product', {
     // stock_quantity (how much of the product is available in stores)
     stock_quantity: Sequelize.INTEGER
 
+}, {
+    timestamps: false
 });
 
 
 sequelize.sync()
     .then(() => Product.create({
+        item_id: 12,
         product_name: 'apples',
         department_name: 'produce',
         price: 3,
