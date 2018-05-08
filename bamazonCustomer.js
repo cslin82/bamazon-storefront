@@ -32,10 +32,19 @@ const Product = sequelize.define('product', {
 sequelize.sync()
     .then(() => Product.findAll({
         // attributes: ["product_name"],
-        raw: true
-    })) // end .then for SELECT * FROM... query
+        // raw: true
+    })) // end sequelize.sync.then for SELECT * FROM... query
     .then(productArr => {
-        console.log(productArr);
+        // console.log(productArr);
+
+        productArr.forEach(element => {
+            let prodInfo = 
+            'item #' + element.item_id + ': ' + element.product_name + 
+            ' in stock: ' + element.stock_quantity + ' at ' + element.price + ' each';
+            console.log(prodInfo);
+            
+        });
+
         var productList = productArr.map(x => x.product_name);
 
         const questions = [
@@ -61,12 +70,18 @@ sequelize.sync()
             console.log(answers);
             var yourProduct = productArr.find(element => element.product_name === answers.productName);
             console.log('yourproduct:', yourProduct);
-
+            
             if (yourProduct.stock_quantity >= answers.orderQuantity) {
-                console.log('ordering', answers.orderQuantity, 'of',  yourProduct.product_name);
+                console.log('ordering', answers.orderQuantity, 'of', yourProduct.product_name, 'for a total of', answers.orderQuantity * yourProduct.price );
+                
+                console.log('your total cost is', answers.orderQuantity, 'of',  yourProduct.product_name);
                 console.log('new inventory of', yourProduct.product_name, 'is', yourProduct.stock_quantity - answers.orderQuantity);
+
+                yourProduct.stock_quantity -= answers.orderQuantity;
+                console.log('yourProduct.stock_quantity:', yourProduct.stock_quantity);
                 
-                
+                yourProduct.save().then(console.log('done?'));
+
             } else {
                 console.log('insufficient stock');
                 
@@ -74,12 +89,9 @@ sequelize.sync()
             
             
         
-        });
-        
-
-
-
-    }); // end .then 2
+        }) // end inquirer.prompt.then
+        .then(() => process.exit());
+    }); // end sequelize.sync.then.then
 
 
 
