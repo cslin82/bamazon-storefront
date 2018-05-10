@@ -25,8 +25,8 @@ const Product = sequelize.define('product', {
     stock_quantity: Sequelize.INTEGER
 
 }, {
-    timestamps: false
-});
+        timestamps: false
+    });
 
 
 sequelize.sync()
@@ -38,11 +38,11 @@ sequelize.sync()
         // console.log(productArr);
 
         productArr.forEach(element => {
-            let prodInfo = 
-            'item #' + element.item_id + ': ' + element.product_name + 
-            ' in stock: ' + element.stock_quantity + ' at ' + element.price + ' each';
+            let prodInfo =
+                'item #' + element.item_id + ': ' + element.product_name +
+                ' in stock: ' + element.stock_quantity + ' at ' + element.price + ' each';
             console.log(prodInfo);
-            
+
         });
 
         var productList = productArr.map(x => x.product_name);
@@ -55,7 +55,7 @@ sequelize.sync()
                 message: "What product do you want?",
                 paginated: true,
                 choices: productList
-        
+
             },
             {
                 type: 'input',
@@ -63,34 +63,35 @@ sequelize.sync()
                 message: "How many do you want?"
             }
         ];
-        
-        
-        
+
+
+
         inquirer.prompt(questions).then(answers => {
             console.log(answers);
             var yourProduct = productArr.find(element => element.product_name === answers.productName);
-            console.log('yourproduct:', yourProduct);
-            
+            // console.log('yourproduct:', yourProduct);
+
             if (yourProduct.stock_quantity >= answers.orderQuantity) {
-                console.log('ordering', answers.orderQuantity, 'of', yourProduct.product_name, 'for a total of', answers.orderQuantity * yourProduct.price );
-                
-                console.log('your total cost is', answers.orderQuantity, 'of',  yourProduct.product_name);
+                console.log('ordering', answers.orderQuantity, 'of', yourProduct.product_name, 'for a total of', answers.orderQuantity * yourProduct.price);
+
+                console.log('your total cost is', answers.orderQuantity, 'of', yourProduct.product_name);
                 console.log('new inventory of', yourProduct.product_name, 'is', yourProduct.stock_quantity - answers.orderQuantity);
 
                 yourProduct.stock_quantity -= answers.orderQuantity;
                 console.log('yourProduct.stock_quantity:', yourProduct.stock_quantity);
                 
-                yourProduct.save().then(console.log('done?'));
+                // yourProduct.save()
+                yourProduct.decrement('stock_quantity', { by: answers.orderQuantity }).save((() => {} )).success(() => console.log('yourProduct.stock_quantity:', yourProduct.stock_quantity));
 
             } else {
                 console.log('insufficient stock');
-                
+
             }
-            
-            
-        
+
+
+
         }) // end inquirer.prompt.then
-        .then(() => process.exit());
+            .then(() => process.exit());
     }); // end sequelize.sync.then.then
 
 
