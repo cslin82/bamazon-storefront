@@ -19,7 +19,7 @@
   "homepage": "https://github.com/cslin82/bamazon-storefront#readme",
   "dependencies": {
     "inquirer": "^5.2.0",
-    "mysql2": "^1.5.3",
-    "sequelize": "^4.38.0"
+    "mysql2": "^1.6.5",
+    "sequelize": "^4.42.0"
   }
 }
