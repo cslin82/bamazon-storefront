@@ -20,6 +20,6 @@
   "dependencies": {
     "inquirer": "^6.3.1",
     "mysql2": "^1.6.5",
-    "sequelize": "^5.15.1"
+    "sequelize": "^6.29.0"
   }
 }
